@@ -82,11 +82,7 @@ DEFINE FUNCTION booleanProd(u, v):
 
             col.append(0)
 
-
-
         s.append(col)
-
-
 
     FOR i IN range(len(u)):
 
@@ -96,29 +92,19 @@ DEFINE FUNCTION booleanProd(u, v):
 
             SET isEqual TO False
 
-
-
             FOR k IN range(len(u)):
-
-
 
                 IF u[i][k] EQUALS 1 and v[k][j] EQUALS 1:
 
                     SET isEqual TO True
-
-
-
+                    
             IF isEqual:
 
                 s[i].append(1)
 
-
-
             IF not isEqual:
 
                 s[i].append(0)
-
-
 
     RETURN s
 
