@@ -966,7 +966,7 @@ WHILE True:
 
         SET powerInf TO MatrixIdentify(MatrixOrder)
 
-        FOR i IN range(MatrixOrder - 1):
+        FOR i IN range(MatrixOrder):
 
             SET powerInf TO Union(powerInf, Power[i])
 
