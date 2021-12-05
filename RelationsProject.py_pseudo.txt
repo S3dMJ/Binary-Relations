@@ -1,0 +1,1176 @@
+from typing IMPORT Set
+
+IMPORT random
+
+
+
+SET Space TO "    "
+
+
+
+
+
+DEFINE FUNCTION INPUT2set(A, Rsize, raw):
+
+    SET Rset TO []
+
+    SET counter TO 2
+
+    SET j TO 0
+
+    FOR i IN range(Rsize):
+
+        Rset.append([0, 0])
+
+
+
+    FOR i IN range(len(raw)):
+
+        IF raw[i] IN A and counter % 2 EQUALS 0 and j < Rsize:
+
+            SET Rset[j][0] TO raw[i]
+
+            SET counter TO counter + 1
+
+        ELSEIF raw[i] IN A and counter % 2 != 0 and j < Rsize:
+
+            SET Rset[j][1] TO raw[i]
+
+            SET counter TO counter + 1
+
+            SET j TO j + 1
+
+
+
+    RETURN Rset
+
+
+
+
+
+DEFINE FUNCTION set2matrix(a, r_set):
+
+    SET R TO MatrixIdentify(len(a))
+
+    FOR i IN range(len(r_set)):
+
+        SET u TO a.index(r_set[i][0])
+
+        SET v TO a.index(r_set[i][1])
+
+        SET R[u][v] TO 1
+
+    RETURN R
+
+
+
+
+
+DEFINE FUNCTION booleanProd(u, v):
+
+    SET rows TO len(u)
+
+    SET cols TO len(v)
+
+    SET s TO []
+
+    FOR i IN range(rows):
+
+        SET col TO []
+
+        FOR j IN range(cols):
+
+            col.append(0)
+
+
+
+        s.append(col)
+
+
+
+    FOR i IN range(len(u)):
+
+        s[i].clear()
+
+        FOR j IN range(len(v)):
+
+            SET isEqual TO False
+
+
+
+            FOR k IN range(len(u)):
+
+
+
+                IF u[i][k] EQUALS 1 and v[k][j] EQUALS 1:
+
+                    SET isEqual TO True
+
+
+
+            IF isEqual:
+
+                s[i].append(1)
+
+
+
+            IF not isEqual:
+
+                s[i].append(0)
+
+
+
+    RETURN s
+
+
+
+
+
+DEFINE FUNCTION Inverse(r):
+
+    SET r_inverse TO MatrixIdentify(len(r))
+
+    FOR i IN range(len(r)):
+
+        r_inverse[i].clear()
+
+        FOR j IN range(len(r)):
+
+            r_inverse[i].append(r[j][i])
+
+
+
+    RETURN r_inverse
+
+
+
+
+
+DEFINE FUNCTION Compliment(r):
+
+    SET r_compliment TO MatrixIdentify(len(r))
+
+    FOR i IN range(len(r)):
+
+        FOR j IN range(len(r)):
+
+            IF r[i][j] EQUALS 1:
+
+                SET r_compliment[i][j] TO 0
+
+            ELSE:
+
+                SET r_compliment[i][j] TO 1
+
+
+
+    RETURN r_compliment
+
+
+
+
+
+DEFINE FUNCTION Union(r, s):
+
+    SET union_matrix TO MatrixIdentify(len(r))
+
+
+
+    FOR i IN range(len(r)):
+
+        FOR j IN range(len(r)):
+
+            IF r[i][j] EQUALS 1 or s[i][j] EQUALS 1:
+
+                SET union_matrix[i][j] TO 1
+
+
+
+            ELSE:
+
+                SET union_matrix[i][j] TO 0
+
+
+
+    RETURN union_matrix
+
+
+
+
+
+DEFINE FUNCTION Intersect(r, s):
+
+    SET intersect_matrix TO MatrixIdentify(len(r))
+
+    FOR i IN range(len(r)):
+
+        FOR j IN range(len(r)):
+
+            IF RelationsMatrix[i][j] EQUALS 1 and s[i][j] EQUALS 1:
+
+                SET intersect_matrix[i][j] TO 1
+
+            ELSE:
+
+                SET intersect_matrix[i][j] TO 0
+
+        OUTPUT()
+
+    RETURN intersect_matrix
+
+
+
+
+
+DEFINE FUNCTION Matrix2set(A, MR):
+
+    SET R TO []
+
+    FOR i IN range(len(MR)):
+
+        FOR j IN range(len(MR)):
+
+            IF MR[i][j] EQUALS 1:
+
+                R.append((A[i], A[j]))
+
+    RETURN R
+
+
+
+
+
+DEFINE FUNCTION MatrixIdentify(order):
+
+    SET rows TO order
+
+    SET cols TO order
+
+    SET m TO []
+
+    FOR i IN range(rows):
+
+        SET col TO []
+
+        FOR j IN range(cols):
+
+            col.append(0)
+
+        m.append(col)
+
+
+
+    RETURN m
+
+
+
+
+
+DEFINE FUNCTION Reflexive(number_of_rows, r):
+
+    SET is_reflexive TO False
+
+    FOR i IN range(number_of_rows):
+
+        IF r[i][i] EQUALS 1:
+
+            SET is_reflexive TO True
+
+        ELSE:
+
+            SET is_reflexive TO False
+
+            break
+
+    RETURN is_reflexive
+
+
+
+
+
+DEFINE FUNCTION Irreflexive(number_of_rows, r):
+
+    SET is_irreflexive TO False
+
+    FOR i IN range(number_of_rows):
+
+        IF r[i][i] EQUALS 0:
+
+            SET is_irreflexive TO True
+
+        ELSE:
+
+            SET is_irreflexive TO False
+
+            break
+
+    RETURN is_irreflexive
+
+
+
+
+
+DEFINE FUNCTION Symmetric(number_of_rows, r):
+
+    SET is_symmetric TO False
+
+    SET temp TO 1
+
+    FOR i IN range(number_of_rows):
+
+        IF temp EQUALS 1:
+
+            FOR j IN range(number_of_rows):
+
+                IF r[i][j] EQUALS 1 and r[j][i] EQUALS 1:
+
+                    SET is_symmetric TO True
+
+                IF (r[i][j] EQUALS 1 and r[j][i] EQUALS 0) or (r[i][j] EQUALS 0 and r[j][i] EQUALS 1):
+
+                    SET is_symmetric TO False
+
+                    SET temp TO 0
+
+                    break
+
+        ELSE:
+
+            break
+
+    RETURN is_symmetric
+
+
+
+
+
+DEFINE FUNCTION ASymmetric(is_irreflexive, is_anti_symmetric):
+
+    IF is_irreflexive EQUALS True and is_anti_symmetric EQUALS True:
+
+        SET is_a_symmetric TO True
+
+    ELSE:
+
+        SET is_a_symmetric TO False
+
+    RETURN is_a_symmetric
+
+
+
+
+
+DEFINE FUNCTION AntiSymmetric(number_of_rows, r):
+
+    SET is_anti_symmetric TO False
+
+    FOR i IN range(number_of_rows):
+
+        FOR j IN range(number_of_rows):
+
+            IF i != j:
+
+                IF r[i][j] EQUALS 1 and r[j][i] EQUALS 1:
+
+                    SET is_anti_symmetric TO False
+
+                    break
+
+                ELSE:
+
+                    SET is_anti_symmetric TO True
+
+    RETURN is_anti_symmetric
+
+
+
+
+
+DEFINE FUNCTION Transitive(r):
+
+    IF r EQUALS booleanProd(r, r):
+
+        SET is_transitive TO True
+
+    ELSE:
+
+        SET is_transitive TO False
+
+    RETURN is_transitive
+
+
+
+
+
+DEFINE FUNCTION Equivalence(is_transitive, is_reflexive, is_symmetric):
+
+    IF is_transitive EQUALS True and is_reflexive EQUALS True and is_symmetric EQUALS True:
+
+        SET is_equivalence TO True
+
+    ELSE:
+
+        SET is_equivalence TO False
+
+    RETURN is_equivalence
+
+
+
+
+
+DEFINE FUNCTION MatrixInputR(set_a):
+
+    WHILE True:
+
+        OUTPUT("\nWould you like to enter the set R (1) or, the relations matrix (2) : ")
+
+        SET user_INPUT TO INPUT()
+
+        OUTPUT()
+
+
+
+        IF user_INPUT EQUALS "1":
+
+            SET MatrixSize TO int(INPUT("Enter Set R Size: "))
+
+            OUTPUT()
+
+            SET raw_INPUT TO ""
+
+            FOR i IN range(MatrixSize):
+
+                OUTPUT("Enter the related pair number " + str(i + 1) + " (example, (a,b)) :")
+
+                SET raw_INPUT TO raw_INPUT + (INPUT())
+
+                OUTPUT()
+
+            SET MatrixSet TO INPUT2set(set_a, MatrixSize, raw_INPUT)
+
+
+
+            SET Matrix TO set2matrix(set_a, MatrixSet)
+
+
+
+            OUTPUT()
+
+            OUTPUT("Set R: ", MatrixSet, )
+
+            break
+
+
+
+        ELSEIF user_INPUT EQUALS "2":
+
+            SET numberOfRows TO len(set_a)
+
+            SET Matrix TO MatrixIdentify(numberOfRows)
+
+
+
+            FOR i IN range(numberOfRows):
+
+                Matrix[i].clear()
+
+                FOR j IN range(numberOfRows):
+
+                    OUTPUT("Enter the Element at R \033[33m'(", i + 1, ",", j + 1, ")'\033[0m :")
+
+
+
+                    IF INPUT() EQUALS "1":
+
+                        Matrix[i].append(int(1))
+
+                    ELSE:
+
+                        Matrix[i].append(int(0))
+
+                OUTPUT()
+
+            break
+
+        ELSE:
+
+            OUTPUT("\n\033[31mPlease Enter a value between '1' and '2'\033[0m\n")
+
+            continue
+
+    RETURN Matrix
+
+
+
+
+
+DEFINE FUNCTION MatrixInputS(set_a):
+
+    WHILE True:
+
+        OUTPUT("\nWould you like to enter the set S (1) or, the relations matrix (2) : ")
+
+        SET user_INPUT TO INPUT()
+
+        OUTPUT()
+
+
+
+        IF user_INPUT EQUALS "1":
+
+            SET MatrixSize TO int(INPUT("Enter Set S Size: "))
+
+            OUTPUT()
+
+            SET raw_INPUT TO ""
+
+            FOR i IN range(MatrixSize):
+
+                OUTPUT("Enter the related pair number " + str(i + 1) + " (example, (a,b)) :")
+
+                SET raw_INPUT TO raw_INPUT + (INPUT())
+
+                OUTPUT()
+
+            SET MatrixSet TO INPUT2set(set_a, MatrixSize, raw_INPUT)
+
+
+
+            SET Matrix TO set2matrix(set_a, MatrixSet)
+
+
+
+            OUTPUT()
+
+            OUTPUT("Set S: ", MatrixSet, )
+
+            break  #
+
+
+
+        ELSEIF user_INPUT EQUALS "2":
+
+            SET numberOfRows TO len(set_a)
+
+            SET Matrix TO MatrixIdentify(numberOfRows)
+
+
+
+            FOR i IN range(numberOfRows):
+
+                Matrix[i].clear()
+
+                FOR j IN range(numberOfRows):
+
+                    OUTPUT("Enter the Element at S \033[33m'(", i + 1, ",", j + 1, ")'\033[0m :")
+
+
+
+                    IF INPUT() EQUALS "1":
+
+                        Matrix[i].append(int(1))
+
+                    ELSE:
+
+                        Matrix[i].append(int(0))
+
+                OUTPUT()
+
+            break
+
+        ELSE:
+
+            OUTPUT("\n\033[31mPlease Enter a value between '1' and '2'\033[0m\n")
+
+            continue
+
+    RETURN Matrix
+
+
+
+
+
+DEFINE FUNCTION OUTPUTMatrix(r):
+
+    OUTPUT()
+
+    FOR i IN range(len(r)):
+
+        FOR j IN range(len(r)):
+
+            IF r[i][j] EQUALS 1:
+
+                OUTPUT("\033[32m", r[i][j], "\033[0m", end=' ')
+
+            ELSE:
+
+                OUTPUT("\033[31m", r[i][j], "\033[0m", end=' ')
+
+        OUTPUT()
+
+
+
+    OUTPUT()
+
+
+
+
+
+DEFINE FUNCTION degreesTable(set_size):
+
+    SET degrees_table TO []
+
+    FOR i IN range(2):
+
+        SET col TO []
+
+        FOR j IN range(set_size):
+
+            col.append(0)
+
+        degrees_table.append(col)
+
+
+
+    FOR i IN range(set_size):
+
+        FOR j IN range(set_size):
+
+            IF RelationsMatrix[i][j] EQUALS 1:
+
+                SET degrees_table[0][j] TO degrees_table[0][j] + 1
+
+
+
+    FOR i IN range(set_size):
+
+        FOR j IN range(set_size):
+
+            IF RelationsMatrix[j][i] EQUALS 1:
+
+                SET degrees_table[1][j] TO degrees_table[1][j] + 1
+
+    RETURN degrees_table
+
+
+
+
+
+DEFINE FUNCTION VTHNtable(A, R):
+
+    SET Table TO []
+
+    SET Vertex TO []
+
+    FOR i IN range(len(A)):
+
+        Vertex.append(0)
+
+    SET Tail TO []
+
+    SET Head TO []
+
+
+
+    # Making a list FOR heads and tails
+
+    FOR i IN range(len(R)):
+
+        Tail.append(R[i][0])
+
+    FOR i IN range(len(R)):
+
+        Head.append(R[i][1])
+
+
+
+    # Making the Main list called Table that will be OUTPUTed
+
+    FOR i IN range(len(R)):
+
+        Table.append([Tail[i], Head[i]])
+
+    random.shuffle(Table)
+
+    FOR i IN range(len(R)):
+
+        Table[i].insert(0, i + 1)
+
+
+
+    # Making the Vertix list
+
+    FOR i IN range(len(A)):
+
+        FOR j IN range(len(R)):
+
+            IF A[i] EQUALS Table[j][1]:
+
+                SET Vertex[i] TO Table[j][0]
+
+                break
+
+
+
+    # adding new coloumn to Taple that will be the 'Next' Column
+
+    FOR i IN range(len(R)):
+
+        Table[i].append(0)
+
+
+
+    # algorithim to find the next element
+
+    FOR i IN range(len(R)):
+
+        FOR j IN range(len(R)):
+
+            IF Table[i][1] EQUALS Table[j][1] and Table[j][0] not IN Vertex and Table[j][3] EQUALS 0 and i != j:
+
+                SET Table[i][3] TO Table[j][0]
+
+                break
+
+
+
+    # Printer
+
+    OUTPUT("\n|Vertex|        Index             |               Tail    "
+
+          "           |               Head              |              Next\n")
+
+    FOR i IN range(len(R)):
+
+        IF i <= 9:
+
+            IF i < len(A):
+
+                OUTPUT(" " * 3 + str(A[i]) + "|0" + str(Vertex[i]) + "|" + 2 * Space + "0" + str(
+
+                    Table[i][0]) + 4 * Space + "| " + 4 * Space + str(Table[i][1]) + 4 * Space + "|" + 4 * Space + str(
+
+                    Table[i][2]) + 4 * Space + "|" + 4 * Space + str(Table[i][3]) + 4 * Space)
+
+            ELSE:
+
+                OUTPUT(4 * Space + "0" + str(Table[i][0]) + 4 * Space + "| " + 4 * Space + str(
+
+                    Table[i][1]) + 4 * Space + "|" + 4 * Space + str(Table[i][2]) + 4 * Space + "|" + 4 * Space + str(
+
+                    Table[i][3]) + 4 * Space)
+
+        ELSE:
+
+            IF i < len(A):
+
+                OUTPUT(" " * 3 + str(A[i]) + "|" + str(Vertex[i]) + "| " + 2 * Space + " " + str(
+
+                    Table[i][0]) + 4 * Space + "|" + 4 * Space + str(Table[i][1]) + 4 * Space + "|" + 4 * Space + str(
+
+                    Table[i][2]) + 4 * Space + "|" + 4 * Space + str(Table[i][3]) + 4 * Space)
+
+            ELSE:
+
+                OUTPUT(4 * Space + str(Table[i][0]) + 4 * Space + "| " + 4 * Space + str(
+
+                    Table[i][1]) + 4 * Space + "|" + 4 * Space + str(Table[i][2]) + 4 * Space + "|" + 4 * Space + str(
+
+                    Table[i][3]) + 4 * Space)
+
+
+
+
+
+OUTPUT()
+
+OUTPUT("**************************************** Program Started ***************************************")
+
+SET A TO []
+
+SET Asize TO int(INPUT("Enter Set A Size: "))
+
+OUTPUT()
+
+FOR i IN range(0, Asize):
+
+    OUTPUT("Enter the element at index", i, )
+
+    SET item TO (INPUT())
+
+    A.append(item)
+
+
+
+SET RelationsMatrix TO MatrixInputR(A)
+
+SET MatrixOrder TO len(RelationsMatrix)
+
+
+
+OUTPUT("\n")
+
+OUTPUT("**************************************** Relation Matrix **************************************")
+
+SET OUTPUT("\nMatrix R TO \n")
+
+OUTPUTMatrix(RelationsMatrix)
+
+OUTPUT("************************************** Relation Proporties **************************************")
+
+
+
+SET isReflexive TO Reflexive(MatrixOrder, RelationsMatrix)
+
+SET isIrreflexive TO Irreflexive(MatrixOrder, RelationsMatrix)
+
+SET isAntiSymmetric TO AntiSymmetric(MatrixOrder, RelationsMatrix)
+
+SET isSymmetric TO Symmetric(MatrixOrder, RelationsMatrix)
+
+SET isASymmetric TO ASymmetric(isIrreflexive, isAntiSymmetric)
+
+SET isTransitive TO Transitive(RelationsMatrix)
+
+SET isEquivalence TO Equivalence(isTransitive, isReflexive, isSymmetric)
+
+
+
+OUTPUT()
+
+IF isReflexive:
+
+    OUTPUT("\033[0mis Matrix R Reflexive:   \033[32m", isReflexive)
+
+ELSE:
+
+    OUTPUT("is Matrix R Reflexive:   \033[31m", isReflexive)
+
+IF isIrreflexive:
+
+    OUTPUT("\033[0mis Matrix R Irreflexive: \033[32m", isIrreflexive)
+
+ELSE:
+
+    OUTPUT("\033[0mis Matrix R Irreflexive: \033[31m", isIrreflexive)
+
+IF isSymmetric:
+
+    OUTPUT("\033[0mis Matrix R Symetric:    \033[32m", isSymmetric)
+
+ELSE:
+
+    OUTPUT("\033[0mis Matrix R Symetric:    \033[31m", isSymmetric)
+
+IF isASymmetric:
+
+    OUTPUT("\033[0mis Matrix R ASymertric:  \033[32m", isASymmetric)
+
+ELSE:
+
+    OUTPUT("\033[0mis Matrix R ASymertric:  \033[31m", isASymmetric)
+
+IF isAntiSymmetric:
+
+    OUTPUT("\033[0mis Matrix R AntiSymtric: \033[32m", isAntiSymmetric)
+
+ELSE:
+
+    OUTPUT("\033[0mis Matrix R AntiSymtric: \033[31m", isAntiSymmetric)
+
+IF isTransitive:
+
+    OUTPUT("\033[0mis Matrix R Transitive:  \033[32m", isTransitive)
+
+ELSE:
+
+    OUTPUT("\033[0mis Matrix R Transitive:  \033[31m", isTransitive)
+
+IF isEquivalence:
+
+    OUTPUT()
+
+    OUTPUT("\033[0mMatrix R is an Equivalence Relation")
+
+ELSE:
+
+    OUTPUT()
+
+    OUTPUT("\033[0mMatrix R is \033[31mnot\033[0m an Equivalence Relation")
+
+
+
+OUTPUT("**************************************** Matrix Operations ****************************************")
+
+
+
+WHILE True:
+
+    OUTPUT("\nWhat operation do you want to find?")
+
+    OUTPUT("\033[33m1)\033[0m  find the Relation R on any given order")
+
+    OUTPUT("\033[33m2)\033[0m  find M R^inf")
+
+    OUTPUT("\033[33m3)\033[0m  find the compliment of the Matrix")
+
+    OUTPUT("\033[33m4)\033[0m  find the inverse of the matrix")
+
+    OUTPUT("\033[33m5)\033[0m  find the union of Matrix R and Matrix S(INPUT)")
+
+    OUTPUT("\033[33m6)\033[0m  find the intersect of Matrix R and Matrix S(INPUT)")
+
+    OUTPUT("\033[33m7)\033[0m  find the boolean product of Matrix R and Matrix S(INPUT)")
+
+    OUTPUT("\033[33m8)\033[0m  find the IN degrees and out degrees table")
+
+    OUTPUT("\033[33m9)\033[0m  find the VERT TAIL HEAD NEXT table")
+
+    OUTPUT("\n"
+
+          "\033[31m0)\033[0m  Exit the program\n")
+
+    SET userOpInput TO INPUT("Enter the index of the desired operation: ")
+
+
+
+    SET Power TO [RelationsMatrix]
+
+
+
+    FOR i IN range(1, MatrixOrder):
+
+        Power.append(booleanProd(RelationsMatrix, Power[i - 1]))
+
+
+
+    IF userOpInput EQUALS "1":
+
+        SET n TO int(INPUT("\nEnter The Number of The Power of MR You Want: "))
+
+        SET order TO n%MatrixOrder
+
+
+
+        OUTPUT("Matrix R^", n, "= \n")
+
+        FOR i IN range(len(Power[order - 1])):
+
+            FOR j IN range(len(Power[order - 1][i])):
+
+                IF Power[order - 1][i][j] EQUALS 1:
+
+                    OUTPUT("\033[32m", Power[order - 1][i][j], "\033[0m", end=' ')
+
+                ELSE:
+
+                    OUTPUT("\033[31m", Power[order - 1][i][j], "\033[0m", end=' ')
+
+            OUTPUT()
+
+        OUTPUT("\n"
+
+              "***********************************************************************************************")
+
+
+
+    IF userOpInput EQUALS "2":
+
+
+
+        SET powerInf TO MatrixIdentify(MatrixOrder)
+
+        FOR i IN range(MatrixOrder - 1):
+
+            SET powerInf TO Union(powerInf, Power[i])
+
+        SET OUTPUT("\nMatrix R^inf TO \n")
+
+        OUTPUTMatrix(powerInf)
+
+
+
+        OUTPUT("\n***********************************************************************************************")
+
+
+
+    IF userOpInput EQUALS "3":
+
+        SET RComp TO Compliment(RelationsMatrix)
+
+        SET OUTPUT("\nCompliment of Matrix R TO ")
+
+        OUTPUTMatrix(RComp)
+
+
+
+        OUTPUT("\n***********************************************************************************************")
+
+
+
+    IF userOpInput EQUALS "4":
+
+        SET RInverse TO Inverse(RelationsMatrix)
+
+        SET OUTPUT("\nInverse of Matrix R TO ")
+
+        OUTPUTMatrix(RInverse)
+
+
+
+        OUTPUT("\n***********************************************************************************************")
+
+
+
+    IF userOpInput EQUALS "5":
+
+        SET S TO MatrixInputS(A)
+
+        SET MRUS TO Union(RelationsMatrix, S)
+
+        OUTPUT("Matrix R =")
+
+        OUTPUTMatrix(RelationsMatrix)
+
+        OUTPUT("Matrix S =")
+
+        OUTPUTMatrix(S)
+
+        SET OUTPUT("\nMatrix R union S TO ")
+
+        OUTPUTMatrix(MRUS)
+
+
+
+        OUTPUT("\n***********************************************************************************************")
+
+
+
+    IF userOpInput EQUALS "6":
+
+        SET S TO MatrixInputS(A)
+
+        SET MRIS TO Intersect(RelationsMatrix, S)
+
+        OUTPUT("Matrix R =")
+
+        OUTPUTMatrix(RelationsMatrix)
+
+        OUTPUT("Matrix S =")
+
+        OUTPUTMatrix(S)
+
+        SET OUTPUT("Matrix R intersect S TO ")
+
+        OUTPUTMatrix(MRIS)
+
+
+
+        OUTPUT("\n***********************************************************************************************")
+
+    IF userOpInput EQUALS "7":
+
+        SET S TO MatrixInputS(A)
+
+
+
+        WHILE True:
+
+            OUTPUT("Would you to find MatrixR X MatrixS (1) or MatrixS X MatrixR (2) ?")
+
+            SET userProductInput TO str(INPUT())
+
+            OUTPUT()
+
+            IF userProductInput EQUALS "1":
+
+                OUTPUT("Matrix R =")
+
+                OUTPUTMatrix(RelationsMatrix)
+
+                OUTPUT("Matrix S =")
+
+                OUTPUTMatrix(S)
+
+                OUTPUT("the Boolean product of MatrixR on MatrixS =")
+
+                OUTPUTMatrix(booleanProd(RelationsMatrix, S))
+
+                break
+
+            ELSEIF userProductInput EQUALS "2":
+
+                OUTPUT("Matrix R =")
+
+                OUTPUTMatrix(RelationsMatrix)
+
+                OUTPUT("Matrix S =")
+
+                OUTPUTMatrix(S)
+
+                OUTPUT("the Boolean product of MatrixS on MatrixR =")
+
+                OUTPUTMatrix(booleanProd(S, RelationsMatrix))
+
+                break
+
+            ELSE:
+
+                OUTPUT("\n\033[31mPlease Enter a value between '1' and '2'\033[0m\n")
+
+
+
+        OUTPUT("\n***********************************************************************************************")
+
+
+
+    IF userOpInput EQUALS "8":
+
+        SET degrees TO degreesTable(MatrixOrder)
+
+
+
+        OUTPUT("in degrees and out degrees table: ")
+
+        OUTPUT()
+
+        FOR i IN range(2):
+
+            IF i EQUALS 0:
+
+                OUTPUT("in degree:  ")
+
+            ELSE:
+
+                OUTPUT("out degree: ")
+
+            FOR j IN range(MatrixOrder):
+
+                OUTPUT("\033[32m", degrees[i][j], "\033[0m", end=' ')
+
+            OUTPUT()
+
+
+
+        OUTPUT("\n***********************************************************************************************")
+
+    IF userOpInput EQUALS "9":
+
+        OUTPUT("\nSet R:\n")
+
+        SET SetR TO Matrix2set(A, RelationsMatrix)
+
+        OUTPUT(SetR)
+
+        VTHNtable(A, SetR)
+
+    IF userOpInput EQUALS "0":
+
+        break
+
+
+
+OUTPUT("\n\n")
+
+OUTPUT("**************************************** Program Ended ****************************************")
+
